@@ -1,0 +1,23 @@
+.wheel{
+	fill: none;
+	stroke: #999;
+	stroke-width: 4px;
+}
+
+.cup{
+	transition: transform .05s linear;
+}
+
+.cup .shell{
+	fill: #333;
+}
+
+.cup .fill{
+	fill: #bbb;
+	/*opacity: 0.;*/
+}
+
+.cup .water{
+	fill: #E91E63;
+	opacity: .5;
+}
