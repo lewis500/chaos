@@ -52,15 +52,12 @@ const Vis = pure(({ cups }) => {
 });
 
 function underSpigot(θ) {
-	let bool = θ <= Math.PI * 0.03 || θ >= Math.PI * 1.97;
-	return bool;
-	// return Math.cos(θ) > 0 && Math.abs(Math.sin(θ)) * RADIUS > 5;
+	return θ <= Math.PI * 0.03 || θ >= Math.PI * 1.97;
 }
 
 function tick(ω, cups) {
 	const torque = γ * d3.sum(cups, d => Math.sin(d.θ) * d.m);
 	const cupMass = d3.sum(cups, d => d.m);
-	// console.log(cupMass);
 	const ω̇ = (torque - ν * ω) / (cupMass + WHEEL_INTERTIA);
 	ω += ω̇;
 
@@ -76,13 +73,17 @@ function tick(ω, cups) {
 class App extends React.PureComponent {
 	constructor(props) {
 		super(props);
-		this.state = {
+		let state = {
 			cups: d3.range(0, NUM_CUPS).map(i => ({
 				θ: i * τ / NUM_CUPS,
 				m: 190 / 36 + Math.random() - Math.random()
 			})),
 			ω: 0
 		};
+		for (var i = 0; i < 700; i++) {
+			state = tick(state.ω, state.cups);
+		}
+		this.state = state;
 		this.timer = null;
 		this.onClick = () => {
 			if (this.timer) return this.timer.stop(), (this.timer = null);
@@ -98,7 +99,7 @@ class App extends React.PureComponent {
 			<div className={style.main}>
 				<div className={style.row}>
 					<Vis cups={this.state.cups} />
-					<Plot cups={this.state.cups} />
+					<Plot cups={this.state.cups} ω={this.state.ω} />
 				</div>
 				<button onClick={this.onClick}>click </button>
 			</div>

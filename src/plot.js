@@ -9,7 +9,10 @@ const WIDTH = 300;
 const HEIGHT = 300;
 const aScale = d3.scaleLinear().domain([-0.1, 0.1]).range([0, WIDTH]);
 const bScale = d3.scaleLinear().domain([-0.1, 0.1]).range([HEIGHT, 0]);
-
+const colorScale = d3
+	.scaleSequential(d3.interpolatePlasma)
+	.domain([-0.05, 0.05]);
+// .domain
 const mar = {
 	top: 10,
 	left: 20,
@@ -17,13 +20,13 @@ const mar = {
 	right: 10
 };
 
-class Plot extends React.PureComponent {
+export default class Plot extends React.PureComponent {
 	componentDidMount() {
 		// console.log("hello");
-		d3.select(this.xAxis).call(d3.axisBottom().scale(aScale));
-		d3.select(this.yAxis).call(d3.axisLeft().scale(bScale));
-		this.a0 = 0;
-		this.b0 = 0;
+		d3.select(this.xAxis).call(d3.axisBottom().scale(aScale).ticks(2));
+		d3.select(this.yAxis).call(d3.axisLeft().scale(bScale).ticks(2));
+		// this.a0 = 0;
+		// this.b0 = 0;
 		this.ctx = this.canvas.getContext("2d");
 	}
 
@@ -36,9 +39,9 @@ class Plot extends React.PureComponent {
 		}
 		a = a / M;
 		b = b / M;
-		if (this.ctx) {
+		if (this.a0) {
 			let ctx = this.ctx;
-			ctx.strokeStyle = "#999";
+			ctx.strokeStyle = colorScale(this.props.ω);
 			ctx.beginPath();
 			ctx.moveTo(aScale(this.a0), bScale(this.b0));
 			ctx.lineTo(aScale(a), bScale(b));
@@ -83,4 +86,3 @@ class Plot extends React.PureComponent {
 	}
 }
 
-export default Plot;
