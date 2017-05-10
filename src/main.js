@@ -11,11 +11,11 @@ const HEIGHT = 400;
 const WIDTH = 400;
 const NUM_CUPS = 36;
 const τ = Math.PI * 2;
-const ν = 4;
-const γ = 1 / 50;
+const ν = 8;
+const γ = 1 / 20;
 const λ = 0.1;
 const k = 0.0005;
-const WHEEL_INTERTIA = 33;
+const WHEEL_INTERTIA = 100;
 
 const Cup = pure(({ θ, m }) => {
 	let pos = [
@@ -86,11 +86,11 @@ class App extends React.PureComponent {
 		this.timer = null;
 		this.onClick = () => {
 			if (this.timer) return this.timer.stop(), (this.timer = null);
-			this.timer = d3.interval(() => {
+			this.timer = d3.timer(() => {
 				this.setState(({ cups, ω }) => {
 					return tick(ω, cups);
 				});
-			}, 5);
+			});
 		};
 	}
 	render() {

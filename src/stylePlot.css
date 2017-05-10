@@ -1,3 +1,11 @@
 .dot{
 	fill: red;
 }
+
+.plot{
+	position: relative;
+}
+
+.canvas{
+	position: absolute;
+}

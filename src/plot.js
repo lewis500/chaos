@@ -19,10 +19,14 @@ const mar = {
 
 class Plot extends React.PureComponent {
 	componentDidMount() {
-		console.log("hello");
+		// console.log("hello");
 		d3.select(this.xAxis).call(d3.axisBottom().scale(aScale));
 		d3.select(this.yAxis).call(d3.axisLeft().scale(bScale));
+		this.a0 = 0;
+		this.b0 = 0;
+		this.ctx = this.canvas.getContext("2d");
 	}
+
 	render() {
 		let M = 0, a = 0, b = 0;
 		for (var d of this.props.cups) {
@@ -32,29 +36,49 @@ class Plot extends React.PureComponent {
 		}
 		a = a / M;
 		b = b / M;
-		// let a = d3.sum(this.props.cups);
+		if (this.ctx) {
+			let ctx = this.ctx;
+			ctx.strokeStyle = "#999";
+			ctx.beginPath();
+			ctx.moveTo(aScale(this.a0), bScale(this.b0));
+			ctx.lineTo(aScale(a), bScale(b));
+			ctx.stroke();
+		}
+		this.a0 = a;
+		this.b0 = b;
+
 		return (
-			<svg
-				width={WIDTH + mar.left + mar.right}
-				height={HEIGHT + mar.top + mar.bottom}
-				className={style.plot}
-			>
-				<g transform={`translate(${mar.left},${mar.right})`}>
-					<g
-						ref={d => (this.xAxis = d)}
-						transform={`translate(0,${HEIGHT / 2})`}
-					/>
-					<g
-						transform={`translate(${WIDTH / 2}, 0)`}
-						ref={d => (this.yAxis = d)}
-					/>
-					<circle
-						r="3"
-						className={style.dot}
-						transform={`translate(${aScale(a)},${bScale(b)})`}
-					/>
-				</g>
-			</svg>
+			<div className={style.plot}>
+				<canvas
+					style={{ left: mar.left, top: mar.top, height: HEIGHT, width: WIDTH }}
+					className={style.canvas}
+					ref={d => (this.canvas = d)}
+					width={WIDTH}
+					height={HEIGHT}
+				/>
+				<svg
+					width={WIDTH + mar.left + mar.right}
+					height={HEIGHT + mar.top + mar.bottom}
+					className={style.plot}
+				>
+					<g transform={`translate(${mar.left},${mar.right})`}>
+						<g
+							ref={d => (this.xAxis = d)}
+							transform={`translate(0,${HEIGHT / 2})`}
+						/>
+						<g
+							transform={`translate(${WIDTH / 2}, 0)`}
+							ref={d => (this.yAxis = d)}
+						/>
+						<circle
+							r="3"
+							className={style.dot}
+							transform={`translate(${aScale(a)},${bScale(b)})`}
+						/>
+					</g>
+				</svg>
+
+			</div>
 		);
 	}
 }
