@@ -5,19 +5,32 @@
 }
 
 .cup{
-	transition: transform .05s linear;
+	transition: transform .01s linear;
 }
 
 .cup .shell{
 	fill: #333;
+	rx: 1px;
+	ry: 1px;
 }
 
 .cup .fill{
 	fill: #bbb;
+	rx: 1px;
+	ry: 1px;
 	/*opacity: 0.;*/
 }
 
 .cup .water{
 	fill: #E91E63;
 	opacity: .5;
+}
+
+.spigot{
+	stroke-width: 12px;
+	stroke:  #E91E63;
+}
+
+.row{
+	display: flex;
 }
